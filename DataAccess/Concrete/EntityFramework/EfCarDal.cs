@@ -3,59 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal:ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, RentacarContext>, ICarDal
     {
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
+        public List<CarDetailDto> getCarDetail()
         {
             using (RentacarContext context = new RentacarContext())
             {
-                return filter == null
-                    ? context.Set<Car>().ToList()
-                    : context.Set<Car>().Where(filter).ToList();
-            }
-        }
+                var result = from c in context.Cars
+                             join b in context.Brands on c.BrandId equals b.Id
+                             join o in context.Colors on c.ColorId equals o.Id
+                             select new CarDetailDto
+                             {
+                                 BrandName = b.BrandName,
+                                 ColorName = o.ColorName,
+                                 ModelYear = c.ModelYear
+                             };
 
-        public Car Get(Expression<Func<Car, bool>> filter)
-        {
-            using (RentacarContext context = new RentacarContext())
-            {
-                return context.Set<Car>().SingleOrDefault(filter);
-            }
-        }
+                return result.ToList();
 
-        public void Add(Car entity)
-        {
-            using (RentacarContext context = new RentacarContext())
-            {
-                var addedEntity = context.Entry(entity);
-                addedEntity.State = EntityState.Added;
-                context.SaveChanges();
-            }
-        }
-
-        public void Update(Car entity)
-        {
-            using (RentacarContext context = new RentacarContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
-        }
-
-        public void Delete(Car entity)
-        {
-            using (RentacarContext context = new RentacarContext())
-            {
-                var deletedEntity = context.Entry(entity);
-                deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
             }
         }
     }

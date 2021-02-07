@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -43,6 +44,11 @@ namespace Business.Concrete
                 Console.WriteLine("Girilen günlük ücreti kontrol ediniz..");
             }
             
+        }
+
+        public List<CarDetailDto> GetCarDetail()
+        {
+            return _carDal.getCarDetail();
         }
     }
 }

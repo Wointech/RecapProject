@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
-using Entities.Abstrat;
+using Core.Entities;
 
 namespace DataAccess.Abstract
 {
