@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 
@@ -18,32 +19,35 @@ namespace Business.Concrete
         }
 
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _brandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
 
-        public Brand GetById(int brandId)
+        public IDataResult<Brand> GetById(int brandId)
         {
-            return _brandDal.Get(b => b.Id == brandId);
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId));
         }
 
-        public void Insert(Brand brand)
+        public IResult Insert(Brand brand)
         {
             Console.WriteLine("Marka Eklendi");
             _brandDal.Add(brand);
+            return new SuccessResult();
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
             Console.WriteLine("Marka Silindi");
             _brandDal.Delete(brand);
+            return new SuccessResult();
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
             Console.WriteLine("Marka güncellendi");
             _brandDal.Update(brand);
+            return new SuccessResult();
         }
     }
 }

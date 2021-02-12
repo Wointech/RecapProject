@@ -5,7 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Business.Constants;
+using Core.Utilities.Results;
 using Entities.DTOs;
+using Car = Entities.Concrete.Car;
 
 namespace Business.Concrete
 {
@@ -18,37 +21,37 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.CarListed);
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return _carDal.GetAll(c=>c.BrandId==id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.BrandId==id));
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return _carDal.GetAll(c => c.ColorId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            if (car.DailyPrice>0)
+            if (car.DailyPrice<0)
             {
-                _carDal.Add(car);
+                return new ErrorResult(Messages.CarError);
+
             }
-            else
-            {
-                Console.WriteLine("Girilen günlük ücreti kontrol ediniz..");
-            }
-            
+            _carDal.Add(car);
+
+            return new SuccessResult(Messages.CarAdded);
+
         }
 
-        public List<CarDetailDto> GetCarDetail()
+        public IDataResult<List<CarDetailDto>> GetCarDetail()
         {
-            return _carDal.getCarDetail();
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.getCarDetail());
         }
     }
 }

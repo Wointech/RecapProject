@@ -10,13 +10,20 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            //CarManagerGetAll();
+            CarManagerGetAll();
 
             //BrandManagerAll();
 
+            //GetCarDetailManager();
+        }
+
+        private static void GetCarDetailManager()
+        {
             CarManager carManager = new CarManager(new EfCarDal());
-            
-            foreach (var carDetail in carManager.GetCarDetail())
+
+            var result = carManager.GetCarDetail();
+
+            foreach (var carDetail in result.Data)
             {
                 Console.WriteLine($"{carDetail.BrandName} -- {carDetail.ColorName} -- {carDetail.ModelYear}");
             }
@@ -26,7 +33,7 @@ namespace ConsoleUI
         {
             BrandManager brandManager = new BrandManager(new EfBrandDal());
 
-            var result = brandManager.GetById(3);
+            var result = brandManager.GetById(3).Data;
             Console.WriteLine(result.BrandName);
 
             //brandManager.Insert(new Brand{BrandName = "Tofaş"});
@@ -35,7 +42,7 @@ namespace ConsoleUI
 
             brandManager.Update(new Brand {Id = 1003, BrandName = "Şahin"});
 
-            foreach (var brand in brandManager.GetAll())
+            foreach (var brand in brandManager.GetAll().Data)
             {
                 Console.WriteLine(brand.BrandName);
             }
@@ -45,7 +52,7 @@ namespace ConsoleUI
         {
             CarManager carManager = new CarManager(new EfCarDal());
 
-            foreach (var car in carManager.GetAll())
+            foreach (var car in carManager.GetAll().Data)
             {
                 Console.WriteLine(car.BrandId);
             }

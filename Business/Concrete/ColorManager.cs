@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 
@@ -17,32 +18,35 @@ namespace Business.Concrete
         }
 
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
 
-        public Color GetById(int colorId)
+        public IDataResult<Color> GetById(int colorId)
         {
-            return _colorDal.Get(c => c.Id == colorId);
+            return new SuccessDataResult<Color>(_colorDal.Get(c => c.Id == colorId));
         }
 
-        public void Insert(Color color)
+        public IResult Insert(Color color)
         {
             Console.WriteLine("Renk Eklendi");
             _colorDal.Add(color);
+            return new SuccessResult();
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
             Console.WriteLine("Renk Silindi");
             _colorDal.Delete(color);
+            return new SuccessResult();
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
             Console.WriteLine("Renk güncellendi");
             _colorDal.Update(color);
+            return new SuccessResult();
         }
     }
 }
