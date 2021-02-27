@@ -9,6 +9,8 @@ using Business.Constants;
 using Core.Utilities.Results;
 using Entities.DTOs;
 using Car = Entities.Concrete.Car;
+using Core.Aspects.Autofac.Validation;
+using Business.ValidationRules.FluentValidation;
 
 namespace Business.Concrete
 {
@@ -36,13 +38,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.DailyPrice<0)
-            {
-                return new ErrorResult(Messages.CarError);
-
-            }
+           
             _carDal.Add(car);
 
             return new SuccessResult(Messages.CarAdded);
